@@ -36,7 +36,9 @@ fun main() {
         when (opcao) {
 
             1 -> {
-                val cachorro = Cachorro(idade , color)
+                println("Digite a raça:")
+                val raca = readlnOrNull().toString().uppercase()
+                val cachorro = Cachorro(idade , color, raca)
                 cachorro.nome = nome
                 repositorioAnimal.adicionar(cachorro)
             }
@@ -46,7 +48,9 @@ fun main() {
                 repositorioAnimal.adicionar(gato)
             }
             3 -> {
-                val passaro = Passaro(idade, color)
+                println("Digite a altura que ele(a) voa (m):")
+                val alturaVoo = readlnOrNull()?.toDouble() ?: 0.0;
+                val passaro = Passaro(idade, color, alturaVoo)
                 passaro.nome = nome
                 repositorioAnimal.adicionar(passaro)
             }
@@ -88,6 +92,9 @@ fun main() {
                 val animalEncontrado = repositorioAnimal.pesquisarAnimalPorNome(nome);
                 println(animalEncontrado ?: "Não foi encontrado nenhum $nome")
             }
+            else ->{
+                println("Tente de novo.... ")
+            }
         }
 
     }
@@ -123,7 +130,7 @@ class RepositorioAnimal {
     }
 
     fun listar() {
-        animais.forEach { println(it) }
+        animais.forEach { println("$it  eh um ${it.javaClass.simpleName}") }
     }
 
     fun remover(nome:String){
@@ -153,7 +160,7 @@ class RepositorioAnimal {
         if (animaisFiltrados.isEmpty()) {
             println("Nenhum animal encontrado com a cor $cor")
         } else {
-            animaisFiltrados.forEach { println("Nome: ${it.nome}, Idade: ${it.idade}, Cor: ${it.color}") }
+            animaisFiltrados.forEach { println("Nome: ${it.nome}, Idade: ${it.idade}, Cor: ${it.color} eh um ${it.javaClass.simpleName}") }
         }
     }
 
@@ -162,7 +169,7 @@ class RepositorioAnimal {
         if (animaisFiltrados.isEmpty()) {
             println("Nenhum animal encontrado com a idade $idade.")
         } else {
-            animaisFiltrados.forEach { println("Nome: ${it.nome}, Idade: ${it.idade}, Cor: ${it.color}") }
+            animaisFiltrados.forEach { println("Nome: ${it.nome}, Idade: ${it.idade}, Cor: ${it.color} eh um ${it.javaClass.simpleName}" ) }
         }
     }
 }
@@ -182,11 +189,20 @@ class RepositorioAnimal {
 
      override fun toString(): String {
          return "nome: $nome idade: $idade cor: $color"
-
      }
 }
+class Homem(idade:Int,color:Color):Animal(idade,color){
 
-class Cachorro(idade: Int, color:Color) : Animal(idade, color) {
+    override fun emitirSom() {
+        println("Olá, eu $nome")
+    }
+
+    override fun idadeEmAnosHumanos(): Int {
+        return this.idade
+    }
+}
+
+class Cachorro(idade: Int, color:Color, var raca:String) : Animal(idade, color) {
     override var nome: String = ""
         get() = field
         set(valor) {
@@ -195,27 +211,27 @@ class Cachorro(idade: Int, color:Color) : Animal(idade, color) {
     override fun emitirSom() {
         println("Au au")
     }
+
+    override fun toString(): String {
+        return "nome: $nome raça: $raca idade: $idade cor: $color"
+    }
 }
+
+
 class Gato(idade: Int,  color:Color) : Animal(idade, color) {
     override fun emitirSom() {
         println("Miau")
     }
 }
 
-class Passaro(idade: Int, color:Color) : Animal(idade, color) {
+class Passaro(idade: Int, color:Color, var alturaVoo: Number) : Animal(idade, color) {
     override fun emitirSom() {
         println("Piu piu")
     }
-}
 
-class Homem(idade:Int,color:Color):Animal(idade,color){
-
-    override fun emitirSom() {
-        println("Olá, como vai? Me chamo: $nome")
-    }
-
-    override fun idadeEmAnosHumanos(): Int {
-        return this.idade
+    override fun toString(): String {
+        return "nome: $nome altura que voa: $alturaVoo idade: $idade cor: $color"
     }
 }
+
 
